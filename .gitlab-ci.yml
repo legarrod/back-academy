@@ -1,12 +1,96 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
-- test
-sast:
-  stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+  - test
+  - deploy_staging
+  - deploy_live
+
+# Unit test:
+#   image:
+#   when: always
+#   stage: test
+#   script:
+#     - npm i
+#     - npm run test:coverage
+#   tags:
+#     - deploy
+
+############################### deploy_staging ###############################
+
+# Create Domain test:
+#   image:
+#   stage: deploy_staging
+#   when: manual
+#   before_script:
+#     - echo "NODE_ENV=$NODE_ENV_STAGING" > .env
+#     - echo "HOST_NAME_MYSQL=$HOST_NAME_MYSQL_DEV" >> .env
+#     - echo "USER_BD=$USER_BD_DEV" >> .env
+#     - echo "NAME_BD=$NAME_BD_DEV" >> .env
+#     - echo "PASWORD_BD=$PASWORD_BD_DEV" >> .env
+#     - echo "PORT=$PORT_DEV" >> .env
+#     - npm i
+#   script:
+#     - serverless create_domain --stage staging
+#   tags:
+#     - deploy
+
+Deploy test:
+  image: nikolaik/python-nodejs:latest
+  stage: deploy_staging
+  when: manual
+  script:
+    - echo "NODE_ENV=$NODE_ENV_STAGING" > .env
+    - echo "HOST_NAME_MYSQL=$HOST_NAME_MYSQL_DEV" >> .env
+    - echo "USER_BD=$USER_BD_DEV" >> .env
+    - echo "NAME_BD=$NAME_BD_DEV" >> .env
+    - echo "PASWORD_BD=$PASWORD_BD_DEV" >> .env
+    - echo "PORT=$PORT_DEV" >> .env
+    - npm i
+    - serverless deploy --stage staging
+  tags:
+    - deploy
+  environment:
+    name: dev
+
+############################### deploy_live ###############################
+
+# Create Domain Live:
+#   image:
+#   stage: deploy_live
+#   only:
+#     - master
+#   when: manual
+#   before_script:
+#     - echo "NODE_ENV=$NODE_ENV_PRODUCTION" > .env
+#     - echo "MONGODB_URL=$MONGO_URI_PRODUCTION" >> .env
+#     - echo "JWT_SECRET=$JWT_SECRET" >> .env
+#     - echo "HOST_EMAIL=$HOST_EMAIL_AWS" >> .env
+#     - echo "USER_EMAIL=$USER_EMAIL_AWS" >> .env
+#     - echo "PASS_EMAIL=$PASS_EMAIL_AWS" >> .env
+#     - echo "EMAIL_CONTACT=$EMAIL_CONTACT" >> .env
+#     - echo "JWT_ACCESS_EXPIRATION_MINUTES=$JWT_ACCESS_EXPIRATION_MINUTES" >> .env
+#     - echo "JWT_REFRESH_EXPIRATION_DAYS=$JWT_REFRESH_EXPIRATION_DAYS" >> .env
+#     - npm i
+#   script:
+#     - serverless create_domain --stage production
+#   tags:
+#     - deploy
+
+Deploy Live:
+  image:
+  stage: deploy_live
+  only:
+    - master
+  before_script:
+    - echo "NODE_ENV=$NODE_ENV_PRODUCTION" > .env
+    - echo "MONGODB_URL=$MONGO_URI_PRODUCTION" >> .env
+    - echo "HOST_EMAIL=$HOST_EMAIL_AWS" >> .env
+    - echo "USER_EMAIL=$USER_EMAIL_AWS" >> .env
+    - echo "PASS_EMAIL=$PASS_EMAIL_AWS" >> .env
+    - echo "EMAIL_CONTACT=$EMAIL_CONTACT" >> .env
+    - echo "JWT_SECRET=$JWT_SECRET" >> .env
+    - echo "JWT_ACCESS_EXPIRATION_MINUTES=$JWT_ACCESS_EXPIRATION_MINUTES" >> .env
+    - echo "JWT_REFRESH_EXPIRATION_DAYS=$JWT_REFRESH_EXPIRATION_DAYS" >> .env
+    - npm i
+  script:
+    - serverless deploy --stage production
+  tags:
+    - deploy

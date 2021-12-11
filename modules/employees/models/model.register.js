@@ -1,8 +1,5 @@
 const { db } = require('../../../models');
 
-db.employees = require('./employees.model')(
-  db.sequelizeConection,
-  db.Sequelize
-);
+db.employees = require('./employees.model')(db.sequelize, db.Sequelize);
 
 module.exports = { db };

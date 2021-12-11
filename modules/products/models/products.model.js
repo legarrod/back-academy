@@ -1,41 +1,38 @@
 module.exports = (sequelize, Sequelize) => {
-  const EMPLOYEES_TABLE = 'employees';
+  const PRODUCTS_TABLE = 'products';
   const config = {
     sequelize,
-    tableName: EMPLOYEES_TABLE,
+    tableName: PRODUCTS_TABLE,
     modelName: 'Parking',
     timestamps: false,
   };
-  const parkingSchema = {
+  const productsSchema = {
     id: {
       primaryKey: true,
       unique: true,
       allowNull: false, //por verificar
       type: Sequelize.INTEGER(1).UNSIGNED,
     },
-    document_type: {
+    sku: {
       type: Sequelize.STRING,
     },
-    identification_number: {
+    name_product: {
       type: Sequelize.STRING,
     },
-    full_name: {
+    photo_link: {
       type: Sequelize.STRING,
     },
-    address: {
-      type: Sequelize.STRING,
-    },
-    email: {
-      type: Sequelize.STRING,
-    },
-    cellphone: {
+    descriptionProd: {
       type: Sequelize.STRING,
     },
     creation_date: {
       type: Sequelize.DATE,
     },
+    state_products: {
+      type: Sequelize.INTEGER(2),
+    },
   };
-  const parkingVehicles = sequelize.define(EMPLOYEES_TABLE, parkingSchema);
+  const products = sequelize.define(PRODUCTS_TABLE, productsSchema);
 
-  return parkingVehicles;
+  return products;
 };

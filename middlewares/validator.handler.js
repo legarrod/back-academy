@@ -11,4 +11,19 @@ function validatorHandler(schema, property) {
   };
 }
 
-module.exports = validatorHandler;
+function validatorHandlerArray(schema, property) {
+  return (req, res, next) => {
+    const data = req[property];
+    if (data.length >= 0) {
+      data.forEach((element) => {
+        const { error } = schema.validate(element, { abortEarly: false });
+        if (error) {
+          next(boom.badRequest(error));
+        }
+        next();
+      });
+    }
+  };
+}
+
+module.exports = { validatorHandler, validatorHandlerArray };

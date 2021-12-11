@@ -1,17 +1,17 @@
 const express = require('express');
-const employees = require('../services/employes.services');
+const products = require('../services/products.services');
 const { validatorHandler } = require('../../../middlewares/validator.handler');
-const { createProductSchema } = require('../schemas/employees.schema');
+const { createProductSchema } = require('./../schemas/products.schema');
 const router = express.Router();
 
-router.get('/', employees.findAllPublished);
+router.get('/', products.findAllPublished);
 
 router.post(
   '/',
   validatorHandler(createProductSchema, 'body'),
-  employees.create
+  products.create
 );
 
-router.patch('/', employees.update);
+// router.patch('/', employees.update);
 
 module.exports = router;

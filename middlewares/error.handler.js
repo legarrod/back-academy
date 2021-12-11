@@ -1,4 +1,4 @@
-const { stack } = require('sequelize/dist/lib/utils');
+const { ValidationError } = require('sequelize');
 
 function logErrors(error, req, res, next) {
   console.error(error);

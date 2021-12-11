@@ -1,8 +1,8 @@
 const { Sequelize } = require('sequelize');
-const sequelizeConection = require('../libs/sequelize');
+const sequelize = require('../libs/sequelize');
 
 const db = {};
 db.Sequelize = Sequelize;
-db.sequelizeConection = sequelizeConection;
+db.sequelize = sequelize;
 
 module.exports = { db };

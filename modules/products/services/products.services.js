@@ -1,26 +1,35 @@
 const boom = require('@hapi/boom');
 const { userExist } = require('../../../utils/utils');
 const { db } = require('../models/model.register');
-const employees = db.employees;
+const products = db.products;
 const Op = db.Sequelize.Op;
 
 // Create and Save a new Tutorial
 exports.create = async (req, res, next) => {
-  const fullName = req.body.full_name;
-
-  if (!fullName) {
-    next(boom.notFound('Content name can not be empty!'));
-  }
+  const creation = new Date();
+  const imageDefault = 'https://crmsystem.tech/img/not-image.png';
+  const { sku, name_product, photo_link, descriptionProd, state_products } =
+    req.body;
+  const dataSave = {
+    id: '',
+    sku: sku,
+    name_product: name_product,
+    photo_link: photo_link || imageDefault,
+    descriptionProd: descriptionProd,
+    creation_date: creation,
+    state_products: state_products,
+  };
   try {
-    const result = await employees.create(req.body);
-    res.send({
-      message: `Vehicle with plate ${result?.full_name} entry succesfully`,
-    });
+    const result = await products.create(dataSave);
+    if (result) {
+      res.send({
+        message: `SUCCESSFULLY_CREATED`,
+      });
+    }
   } catch (error) {
     res.status(500).send({
       message:
-        error.message ||
-        'Some error occurred while creating the vehicle entry.',
+        error.message || 'Some error occurred while creating the products.',
     });
   }
 };
@@ -34,12 +43,12 @@ exports.findOne = async (req, res, next) => {
   var condition = identification_number
     ? { identification_number: identification_number }
     : null;
-  const data = await employees.findAll({ where: condition });
+  const data = await products.findAll({ where: condition });
   try {
     if (data?.length > 0) {
       res.send(data);
     } else {
-      next(boom.notFound('USER_DOES_NOT_EXIST'));
+      next(boom.notFound('PRODUCT_DOES_NOT_EXIST'));
     }
   } catch (error) {
     next(error);
@@ -56,11 +65,12 @@ exports.update = async (req, res, next) => {
     email: email,
     cellphone: cellphone,
   };
-  const result = await employees.update(dataUpdate, {
+  const result = await products.update(dataUpdate, {
     where: { identification_number: identification_number },
   });
   const condition = { identification_number: identification_number };
   const userExists = await userExist(employees, condition, next);
+
   if (userExists) {
     try {
       if (result[0] === 1 || result[0] === 3) {
@@ -93,14 +103,15 @@ exports.deleteAll = (req, res) => {};
 
 // Find all published Tutorials
 exports.findAllPublished = async (req, res, next) => {
-  //http://localhost:3000/api/v1/employees?plate=BCB14B
-  //http://localhost:3000/api/v1/employees
   try {
-    const { identification } = req.query;
-    var condition = identification
-      ? { identification_number: identification }
-      : null;
-    const result = await employees.findAll({ where: condition });
+    const { name, offset, limit } = req.query;
+    var condition = name ? { name_product: name } : null;
+    const options = { where: condition, offset: 0, limit: 5 };
+    if (offset && limit) {
+      options.limit = parseInt(limit);
+      options.offset = parseInt(offset);
+    }
+    const result = await products.findAll(options);
     res.send(result);
   } catch (error) {
     next(error);

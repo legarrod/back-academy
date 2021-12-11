@@ -25,7 +25,7 @@ app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log('Port conected: ' + PORT);
-  db.sequelizeConection
+  db.sequelize
     .authenticate()
     .then(() => {
       console.log('Conection success');

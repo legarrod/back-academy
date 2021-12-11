@@ -1,12 +1,12 @@
 const { Sequelize } = require('sequelize');
-const setupModels = require("./../db/models")
+const setupModels = require('./../db/models');
 
-const sequelizeConection = new Sequelize(
+const sequelize = new Sequelize(
   process.env.NAME_BD,
   process.env.USER_BD,
   process.env.PASWORD_BD,
   {
-    host: process.env.HOST_NAME,
+    host: process.env.HOST_NAME_MYSQL,
     dialect: 'mysql',
     logging: false,
     define: {
@@ -14,5 +14,5 @@ const sequelizeConection = new Sequelize(
     },
   }
 );
-setupModels(sequelizeConection)
-module.exports = sequelizeConection;
+setupModels(sequelize);
+module.exports = sequelize;

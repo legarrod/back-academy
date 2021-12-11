@@ -42,9 +42,9 @@ class Home extends Model {
       as: 'home',
     });
   }
-  static config(sequelizeConection) {
+  static config(sequelize) {
     return {
-      sequelizeConection,
+      sequelize,
       tableName: HOME_TABLE,
       modelName: 'Home',
       timestamps: false,

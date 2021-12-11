@@ -41,9 +41,9 @@ class User extends Model {
       as: 'home',
     });
   }
-  static config(sequelizeConection) {
+  static config(sequelize) {
     return {
-      sequelizeConection,
+      sequelize,
       tableName: USER_TABLE,
       modelName: 'User',
       timestamps: false,
