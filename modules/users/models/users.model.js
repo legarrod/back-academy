@@ -1,12 +1,7 @@
 module.exports = (sequelize, Sequelize) => {
-  const CUSTOMERS_TABLE = 'customers';
-  const config = {
-    sequelize,
-    tableName: CUSTOMERS_TABLE,
-    modelName: 'Customers',
-    timestamps: false,
-  };
-  const customerSchema = {
+  const USERS_TABLE = 'users';
+
+  const usersSchema = {
     id: {
       primaryKey: true,
       unique: true,
@@ -16,19 +11,22 @@ module.exports = (sequelize, Sequelize) => {
     document_type: {
       type: Sequelize.STRING,
     },
-    customer_type: {
-      type: Sequelize.STRING,
-    },
     identification_number: {
       type: Sequelize.STRING,
     },
     full_name: {
       type: Sequelize.STRING,
     },
-    address_customer: {
+    afiliateid: {
+      type: Sequelize.STRING,
+    },
+    address: {
       type: Sequelize.STRING,
     },
     email: {
+      type: Sequelize.STRING,
+    },
+    password: {
       type: Sequelize.STRING,
     },
     cellphone: {
@@ -37,17 +35,8 @@ module.exports = (sequelize, Sequelize) => {
     creation_date: {
       type: Sequelize.DATE,
     },
-    state_customer: {
-      type: Sequelize.STRING,
-    },
-    last_call: {
-      type: Sequelize.DATE,
-    },
-    recurrence: {
-      type: Sequelize.INTEGER(1).UNSIGNED,
-    },
   };
-  const parkingVehicles = sequelize.define(CUSTOMERS_TABLE, customerSchema);
+  const users = sequelize.define(USERS_TABLE, usersSchema);
 
-  return parkingVehicles;
+  return users;
 };

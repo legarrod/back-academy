@@ -7,14 +7,22 @@ const {
   boomErrorHandler,
   ormErrorHandler,
 } = require('./middlewares/error.handler');
+const { checkApiKey } = require('./middlewares/auth.handler');
+require('./utils/auth/index');
 
 const express = require('express');
 const routerApi = require('./routes');
 const app = express();
+const cors = require('cors');
 
 const { db } = require('./models/index');
 const PORT = process.env.PORT;
+app.use(cors());
 app.use(express.json());
+
+app.get('/nueva-ruta', checkApiKey, (req, res) => {
+  res.send('Hola, soy una nueva ruta');
+});
 
 routerApi(app);
 

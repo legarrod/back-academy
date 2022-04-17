@@ -2,31 +2,68 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const USER_TABLE = 'users';
 
-const userSchema = {
+const UserSchema = {
   id: {
     allowNull: false,
-    autoIncrement: true,
     primaryKey: true,
-    type: DataTypes.INTEGER,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4(2),
+  },
+  document_type: {
+    allowNull: true,
+    type: DataTypes.STRING,
+    unique: false,
+  },
+  role: {
+    allowNull: true,
+    type: DataTypes.STRING,
+    unique: false,
+    defaultValue: 'user',
+  },
+  identification_number: {
+    allowNull: true,
+    type: DataTypes.STRING,
+    unique: false,
+  },
+  full_name: {
+    allowNull: false,
+    type: DataTypes.STRING,
+    unique: false,
+  },
+  sponsor: {
+    allowNull: true,
+    type: DataTypes.STRING,
+    unique: false,
+    defaultValue: 'platform',
+  },
+  afiliateid: {
+    allowNull: true,
+    type: DataTypes.STRING,
+    unique: true,
+  },
+  address: {
+    allowNull: true,
+    type: DataTypes.STRING,
+    unique: false,
   },
   email: {
     allowNull: false,
     type: DataTypes.STRING,
-    unique: true,
+    unique: false,
   },
   password: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.STRING,
   },
-  role: {
-    allowNull: false,
+  cellphone: {
+    allowNull: true,
     type: DataTypes.STRING,
-    defaultValue: 'customer',
+    unique: false,
   },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
-    field: 'create_at',
+    field: 'creation_date',
     defaultValue: Sequelize.NOW,
   },
 };
@@ -51,4 +88,4 @@ class User extends Model {
   }
 }
 
-module.exports = { USER_TABLE, userSchema, User };
+module.exports = { USER_TABLE, UserSchema, User };

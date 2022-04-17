@@ -1,7 +1,7 @@
 const userExist = async (employees, condition, next) => {
   const data = await employees.findAll({ where: condition });
   try {
-    if (data?.length > 0) {
+    if (data.length > 0) {
       return true;
     } else {
       return false;
