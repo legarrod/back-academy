@@ -16,7 +16,9 @@ router.post(
       };
       const token = jwt.sign(payload, development.secret);
       const userName = user.full_name;
-      res.json({ userName, token });
+      const userAfiliateId = user.afiliateid;
+      const id = user.id;
+      res.json({ id, userName, userAfiliateId, token });
     } catch (error) {
       next(error);
     }

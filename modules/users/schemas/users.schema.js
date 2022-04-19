@@ -11,6 +11,7 @@ const email = Joi.string();
 const password = Joi.string();
 const sponsor = Joi.string();
 const cellphone = Joi.string();
+const active = Joi.boolean();
 const creation_date = Joi.string();
 
 const createUsersSchema = Joi.object({
@@ -24,14 +25,15 @@ const createUsersSchema = Joi.object({
 });
 
 const updateUsersSchema = Joi.object({
-  document_type: document_type,
-  identification_number: identification_number,
-  full_name: full_name,
-  afiliateid: afiliateid,
-  address: address,
-  email: email,
-  password: password,
-  cellphone: cellphone,
+  document_type: document_type.allow(''),
+  identification_number: identification_number.allow(''),
+  full_name: full_name.allow(''),
+  afiliateid: afiliateid.allow(''),
+  address: address.allow(''),
+  email: email.allow(''),
+  active: active.allow(''),
+  password: password.allow(''),
+  cellphone: cellphone.allow(''),
 });
 
 const getUsersSchema = Joi.object({
@@ -43,4 +45,9 @@ const getUserEmailSchema = Joi.object({
   password: password,
 });
 
-module.exports = { createUsersSchema, updateUsersSchema, getUsersSchema };
+module.exports = {
+  createUsersSchema,
+  updateUsersSchema,
+  getUsersSchema,
+  getUserEmailSchema,
+};

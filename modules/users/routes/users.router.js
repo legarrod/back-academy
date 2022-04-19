@@ -17,6 +17,12 @@ router.get(
   users.findAllAdmin
 );
 
+router.get(
+  '/list-referer-by-user/:sponsor',
+  passport.authenticate('jwt', { session: false }),
+  users.findBySponsor
+);
+
 router.post('/', validatorHandler(createUsersSchema, 'body'), users.create);
 
 router.patch(
@@ -26,6 +32,7 @@ router.patch(
   validatorHandler(updateUsersSchema, 'body'),
   users.update
 );
+
 router.get('/:id', users.findOne);
 
 module.exports = router;

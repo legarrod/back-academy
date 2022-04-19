@@ -20,6 +20,12 @@ const UserSchema = {
     unique: false,
     defaultValue: 'user',
   },
+  active: {
+    allowNull: true,
+    type: DataTypes.BOOLEAN,
+    unique: false,
+    defaultValue: false,
+  },
   identification_number: {
     allowNull: true,
     type: DataTypes.STRING,

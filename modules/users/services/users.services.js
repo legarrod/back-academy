@@ -40,6 +40,31 @@ exports.findAllAdmin = async (req, res) => {
   }
 };
 
+exports.findBySponsor = async (req, res) => {
+  const { sponsor } = req.params;
+
+  try {
+    const result = await models.User.findAll({
+      where: {
+        sponsor: sponsor,
+      },
+    });
+    // {
+    //   id: result.id,
+    //   full_name: result.full_name,
+    //   email: result.email,
+    //   isActive: result.active,
+    // }
+    if (result) {
+      res.send(result);
+    } else {
+      next(boom.notFound('YOU_HAVE_NO_REFERRALS'));
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Find a single Tutorial with an id
 exports.findOne = async (req, res, next) => {
   const { id } = req.params;
@@ -59,24 +84,37 @@ exports.findOne = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   const { id } = req?.params;
   const body = req?.body;
-  const passwordHashed = await bcrypt.hash(body.password, 10);
-  const user = await models.User.findByPk(id);
-
-  const newData = {
-    ...body,
-    password: passwordHashed,
-  };
-
-  if (user) {
-    try {
-      const condition = { id: id };
-      const result = await user.update(newData, condition);
-      res.send(result);
-    } catch (error) {
-      next(error);
+  if (body.password) {
+    const passwordHashed = await bcrypt.hash(body.password, 10);
+    const newData = {
+      ...body,
+      password: passwordHashed,
+    };
+    const user = await models.User.findByPk(id);
+    if (user) {
+      try {
+        const condition = { id: id };
+        const result = await user.update(newData, condition);
+        res.send(result);
+      } catch (error) {
+        next(error);
+      }
+    } else {
+      next(boom.notFound('USER_DOES_NOT_EXIST'));
     }
   } else {
-    next(boom.notFound('USER_DOES_NOT_EXIST'));
+    const user = await models.User.findByPk(id);
+    if (user) {
+      try {
+        const condition = { id: id };
+        const result = await user.update(body, condition);
+        res.send(result);
+      } catch (error) {
+        next(error);
+      }
+    } else {
+      next(boom.notFound('USER_DOES_NOT_EXIST'));
+    }
   }
 };
 
