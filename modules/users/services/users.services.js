@@ -28,17 +28,17 @@ const asiganteSponsor = (qty) => {
 // Create and Save a new Tutorial
 exports.create = async (req, res, next) => {
   const passwordHashed = await bcrypt.hash(req?.body?.password, 10);
-  const referenced = { referencedby: req?.body?.sponsor };
+  const referenced = { referencedBy: req?.body?.sponsor };
   const resultReferenced = await models.User.findAll({
     where: referenced,
   });
   const sponsor = req?.body?.sponsor;
 
   const resultMySponsor = await models.User.findAll({
-    where: { sponsor: sponsor },
+    where: { afiliateid: sponsor },
   });
   const { id } = resultMySponsor[0];
-
+  const nameAfiliate = req?.body?.full_name.split(' ')[0];
   const body = {
     refererId: id,
     full_name: req?.body?.full_name,
@@ -49,7 +49,7 @@ exports.create = async (req, res, next) => {
         : 'comisiones',
     email: req?.body?.email,
     password: passwordHashed,
-    afiliateid: 'tdc-' + Math.round(Math.random() * (1000 - 100 + 1)) + 100,
+    afiliateid: nameAfiliate + Math.round(Math.random() * (100 - 10 + 1)) + 10,
   };
 
   try {

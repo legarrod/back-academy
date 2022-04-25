@@ -24,16 +24,18 @@ router.post(
       const resultMyData = await models.User.findAll({
         where: myId,
       });
-      const { refererId } = resultMyData[0];
+      const { sponsor } = resultMyData[0];
 
       const result = await models.User.findAll({
-        where: { id: refererId },
+        where: { afiliateid: sponsor },
       });
+
       const {
         full_name: sponsorName,
         bankAcount: sponsorBanck,
         cellphone: sponsorPhone,
       } = result[0];
+
       res.json({
         id,
         userName,
