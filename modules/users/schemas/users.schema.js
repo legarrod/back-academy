@@ -13,10 +13,15 @@ const sponsor = Joi.string();
 const cellphone = Joi.string();
 const active = Joi.boolean();
 const creation_date = Joi.string();
+const date_activation = Joi.string();
+const referencedby = Joi.string();
+const bankAcount = Joi.string();
+const refererId = Joi.string();
 
 const createUsersSchema = Joi.object({
   full_name: full_name.required(),
   sponsor: sponsor.allow(''),
+  referencedby: referencedby.allow(''),
   role: role.allow(''),
   afiliateid: afiliateid,
   email: email,
@@ -32,8 +37,11 @@ const updateUsersSchema = Joi.object({
   address: address.allow(''),
   email: email.allow(''),
   active: active.allow(''),
+  date_activation: date_activation.allow(''),
+  bankAcount: bankAcount.allow(''),
   password: password.allow(''),
   cellphone: cellphone.allow(''),
+  role: role.allow(''),
 });
 
 const getUsersSchema = Joi.object({

@@ -26,13 +26,19 @@ router.get(
 router.post('/', validatorHandler(createUsersSchema, 'body'), users.create);
 
 router.patch(
+  '/activate/:id',
+  passport.authenticate('jwt', { session: false }),
+  validatorHandler(getUsersSchema, 'params'),
+  validatorHandler(updateUsersSchema, 'body'),
+  users.activation
+);
+router.patch(
   '/:id',
   passport.authenticate('jwt', { session: false }),
   validatorHandler(getUsersSchema, 'params'),
   validatorHandler(updateUsersSchema, 'body'),
   users.update
 );
-
 router.get('/:id', users.findOne);
 
 module.exports = router;

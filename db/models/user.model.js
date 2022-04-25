@@ -9,6 +9,11 @@ const UserSchema = {
     type: Sequelize.UUID,
     defaultValue: Sequelize.UUIDV4(2),
   },
+  refererId: {
+    allowNull: true,
+    type: DataTypes.STRING,
+    unique: false,
+  },
   document_type: {
     allowNull: true,
     type: DataTypes.STRING,
@@ -40,12 +45,21 @@ const UserSchema = {
     allowNull: true,
     type: DataTypes.STRING,
     unique: false,
-    defaultValue: 'platform',
+  },
+  referencedBy: {
+    allowNull: true,
+    type: DataTypes.STRING,
+    unique: false,
   },
   afiliateid: {
     allowNull: true,
     type: DataTypes.STRING,
     unique: true,
+  },
+  bankAcount: {
+    allowNull: true,
+    type: DataTypes.STRING,
+    unique: false,
   },
   address: {
     allowNull: true,
@@ -65,6 +79,11 @@ const UserSchema = {
     allowNull: true,
     type: DataTypes.STRING,
     unique: false,
+  },
+  dateActivation: {
+    allowNull: true,
+    type: DataTypes.DATE,
+    field: 'date_activation',
   },
   createdAt: {
     allowNull: false,

@@ -2,6 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const { development } = require('../../../db/config');
 const jwt = require('jsonwebtoken');
+const { models } = require('./../../../libs/sequelize');
 const router = express.Router();
 
 router.post(
@@ -14,11 +15,34 @@ router.post(
         sub: user.id,
         role: user.role,
       };
+      const { email, password } = req?.body;
       const token = jwt.sign(payload, development.secret);
       const userName = user.full_name;
       const userAfiliateId = user.afiliateid;
       const id = user.id;
-      res.json({ id, userName, userAfiliateId, token });
+      const myId = { id: id };
+      const resultMyData = await models.User.findAll({
+        where: myId,
+      });
+      const { refererId } = resultMyData[0];
+
+      const result = await models.User.findAll({
+        where: { id: refererId },
+      });
+      const {
+        full_name: sponsorName,
+        bankAcount: sponsorBanck,
+        cellphone: sponsorPhone,
+      } = result[0];
+      res.json({
+        id,
+        userName,
+        userAfiliateId,
+        token,
+        sponsorName,
+        sponsorBanck,
+        sponsorPhone,
+      });
     } catch (error) {
       next(error);
     }
